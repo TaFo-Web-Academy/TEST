@@ -634,35 +634,8 @@
 
 <div class="container">
 
-  <!-- ══ INTRO ══ -->
-  <div class="intro-screen" id="introScreen">
-    <div class="badge">Тести равоншиносӣ</div>
-    <h1 class="intro-title">Кадом бовари пинҳонӣ имрӯз зиндагии туро вайрон мекунад?</h1>
-    <p class="intro-sub">Дар ҳар савол як вариант интихоб кун, ки бештар ба ту монанд аст.</p>
-
-    <div class="stats-row">
-      <div class="stat">
-        <span class="stat-num">15</span>
-        <span class="stat-lbl">Савол</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">3</span>
-        <span class="stat-lbl">Натиҷа</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">5′</span>
-        <span class="stat-lbl">Вақт</span>
-      </div>
-    </div>
-
-    <button class="cta-btn" onclick="startQuiz()">
-      Сар кун
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-    </button>
-  </div>
-
   <!-- ══ QUIZ ══ -->
-  <div class="quiz-screen" id="quizScreen">
+  <div class="quiz-screen" id="quizScreen" style="display:block">
     <div class="progress-header">
       <span class="progress-label">Пешрафт</span>
       <span class="progress-fraction" id="progFraction">1 / 15</span>
@@ -706,7 +679,7 @@
       </a>
 
       <!-- First step -->
-     
+      
 
       <button class="retry-btn" onclick="resetQuiz()">↺ Боз як бор гузаштан</button>
     </div>
