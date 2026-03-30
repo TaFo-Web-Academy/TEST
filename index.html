@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест: Бовари пинҳонӣ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07060f;
+      --surface: rgba(255,255,255,0.035);
+      --border: rgba(255,255,255,0.08);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-glow: rgba(201,168,76,0.18);
+      --cream: #f0ece4;
+      --muted: rgba(240,236,228,0.50);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-pill: 100px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 48px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(80,40,160,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 90%, rgba(160,90,30,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Subtle grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ════════════════════════════
+       INTRO SCREEN
+    ════════════════════════════ */
+    .intro-screen {
+      text-align: center;
+      animation: fadeUp 0.9s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--gold-glow);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 2s ease infinite; }
+
+    @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+
+    .intro-title {
+      font-family: 'Philosopher', serif;
+      font-size: clamp(24px, 5.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      background: linear-gradient(145deg, var(--cream) 30%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .intro-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 18px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat + .stat { border-left: 1px solid var(--border); }
+
+    .stat-num {
+      font-family: 'Philosopher', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #12100a;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 17px 44px;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 28px rgba(201,168,76,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,168,76,0.45), inset 0 1px 0 rgba(255,255,255,0.25); }
+    .cta-btn:active { transform: translateY(-1px); }
+
+    .cta-btn svg { transition: transform 0.3s ease; }
+    .cta-btn:hover svg { transform: translateX(4px); }
+
+    /* ════════════════════════════
+       QUIZ SCREEN
+    ════════════════════════════ */
+    .quiz-screen { display: none; }
+
+    /* Progress */
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .progress-fraction {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 3px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 100px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      box-shadow: 0 0 10px rgba(201,168,76,0.6);
+      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Question Card */
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 30px 26px 26px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow:
+        0 24px 64px rgba(0,0,0,0.45),
+        0 1px 0 rgba(255,255,255,0.05) inset,
+        0 -1px 0 rgba(0,0,0,0.2) inset;
+    }
+
+    .q-num {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .q-num::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(201,168,76,0.3), transparent);
+    }
+
+    .q-text {
+      font-family: 'Philosopher', serif;
+      font-size: clamp(16px, 3.5vw, 20px);
+      line-height: 1.6;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-md);
+      padding: 15px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.22s ease;
+      color: var(--cream);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.5;
+      width: 100%;
+    }
+
+    .opt-btn:hover {
+      background: rgba(201,168,76,0.08);
+      border-color: rgba(201,168,76,0.25);
+      transform: translateX(3px);
+    }
+
+    .opt-btn.active {
+      background: rgba(201,168,76,0.13);
+      border-color: var(--gold);
+      box-shadow: 0 0 24px rgba(201,168,76,0.08);
+    }
+
+    .opt-circle {
+      min-width: 30px;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.22);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.22s ease;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .opt-btn.active .opt-circle {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #12100a;
+    }
+
+    /* Nav */
+    .nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .btn-back, .btn-next {
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 20px;
+      transition: all 0.22s ease;
+    }
+
+    .btn-back {
+      flex: 0 0 auto;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: 14px 22px;
+    }
+
+    .btn-back:hover { background: rgba(255,255,255,0.09); color: var(--cream); }
+
+    .btn-next {
+      flex: 1;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #12100a;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,168,76,0.45); }
+
+    .btn-back:disabled, .btn-next:disabled { opacity: 0.25; cursor: not-allowed; transform: none !important; }
+
+    /* Shake on no answer */
+    .shake { animation: shake 0.45s ease both !important; }
+    @keyframes shake {
+      0%,100%{ transform:translateX(0); }
+      20%{ transform:translateX(-8px); }
+      40%{ transform:translateX(8px); }
+      60%{ transform:translateX(-5px); }
+      80%{ transform:translateX(5px); }
+    }
+
+    /* ════════════════════════════
+       RESULT SCREEN
+    ════════════════════════════ */
+    .result-screen { display: none; animation: fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) both; }
+
+    .res-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 26px 28px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.05) inset;
+      text-align: center;
+    }
+
+    .res-emoji {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.25);
+      background: var(--gold-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 22px;
+      box-shadow: 0 0 40px rgba(201,168,76,0.12);
+    }
+
+    .res-eyebrow {
+      font-size: 10px;
+      letter-spacing: 3.5px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .res-title {
+      font-family: 'Philosopher', serif;
+      font-size: clamp(21px, 5vw, 30px);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      background: linear-gradient(145deg, var(--cream) 30%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .res-desc {
+      font-size: 14.5px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 26px;
+    }
+
+    /* ── Audio Player ── */
+    .audio-box {
+      background: rgba(201,168,76,0.05);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .audio-label {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .play-circle {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(201,168,76,0.35);
+      transition: all 0.25s ease;
+    }
+
+    .play-circle:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
+    .play-circle svg { fill: #12100a; }
+
+    .player-info { flex: 1; }
+
+    .audio-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 6px;
+      accent-color: var(--gold);
+    }
+
+    .audio-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .audio-range::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+    .audio-time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Step box ── */
+    .step-box {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .step-eyebrow {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .step-text {
+      font-family: 'Philosopher', serif;
+      font-size: 15.5px;
+      font-style: italic;
+      color: rgba(240,236,228,0.88);
+      line-height: 1.65;
+    }
+
+    /* ── Scores mini ── */
+    .scores-mini {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .score-chip {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .score-chip.winner {
+      background: var(--gold-glow);
+      border-color: rgba(201,168,76,0.3);
+    }
+
+    .chip-letter {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .score-chip.winner .chip-letter { color: var(--gold-light); }
+
+    .chip-bar-bg {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 100px;
+    }
+
+    .chip-bar-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.15);
+      border-radius: 100px;
+      transition: width 1s ease;
+    }
+
+    .score-chip.winner .chip-bar-fill { background: var(--gold); }
+
+    .chip-count {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .score-chip.winner .chip-count { color: var(--gold-light); }
+
+    .retry-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.3px;
+    }
+
+    .retry-btn:hover { background: rgba(255,255,255,0.05); color: var(--cream); border-color: rgba(255,255,255,0.18); }
+
+    /* ════════════════════════════
+       ANIMATIONS
+    ════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(28px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+
+    @keyframes cardIn {
+      from { opacity:0; transform: translateX(32px) scale(0.98); }
+      to { opacity:1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes cardOut {
+      from { opacity:1; transform: translateX(0) scale(1); }
+      to { opacity:0; transform: translateX(-32px) scale(0.98); }
+    }
+
+    .slide-in { animation: cardIn 0.42s cubic-bezier(0.4,0,0.2,1) both; }
+
+    /* ════════════════════════════
+       MOBILE
+    ════════════════════════════ */
+    @media (max-width: 480px) {
+      body { padding: 20px 14px 40px; align-items: flex-start; padding-top: 36px; }
+      .q-card { padding: 24px 18px 22px; }
+      .res-card { padding: 28px 18px 24px; }
+      .cta-btn { padding: 16px 36px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ══ INTRO ══ -->
+  <div class="intro-screen" id="introScreen">
+    <div class="badge">Тести равоншиносӣ</div>
+    <h1 class="intro-title">Кадом бовари пинҳонӣ имрӯз зиндагии туро вайрон мекунад?</h1>
+    <p class="intro-sub">Дар ҳар савол як вариант интихоб кун, ки бештар ба ту монанд аст.</p>
+
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-num">15</span>
+        <span class="stat-lbl">Савол</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-lbl">Натиҷа</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">5′</span>
+        <span class="stat-lbl">Вақт</span>
+      </div>
+    </div>
+
+    <button class="cta-btn" onclick="startQuiz()">
+      Сар кун
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div class="quiz-screen" id="quizScreen">
+    <div class="progress-header">
+      <span class="progress-label">Пешрафт</span>
+      <span class="progress-fraction" id="progFraction">1 / 15</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progFill" style="width:6.67%"></div>
+    </div>
+
+    <div class="q-card slide-in" id="qCard">
+      <div class="q-num" id="qNum">Савол 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optList"></div>
+    </div>
+
+    <div class="nav">
+      <button class="btn-back" id="btnBack" onclick="prevQ()">← Қафо</button>
+      <button class="btn-next" id="btnNext" onclick="nextQ()">Пеш →</button>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div class="result-screen" id="resultScreen">
+    <div class="res-card">
+      <div class="res-emoji" id="resEmoji">🪞</div>
+      <div class="res-eyebrow">Бовари пинҳонии ту</div>
+      <h2 class="res-title" id="resTitle"></h2>
+      <p class="res-desc" id="resDesc"></p>
+
+      <!-- Score breakdown -->
+      <div class="scores-mini" id="scoresMini"></div>
+
+      <!-- Audio player -->
+      <div class="audio-box">
+        <div class="audio-label">🎙 Паёми овозии мутахассис</div>
+        <div class="player-row">
+          <button class="play-circle" id="playBtn" onclick="toggleAudio()">
+            <svg id="playIco" width="18" height="18" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+          </button>
+          <div class="player-info">
+            <input type="range" class="audio-range" id="audioRange" value="0" min="0" step="0.01">
+            <div class="audio-time-row">
+              <span id="timeCur">0:00</span>
+              <span id="timeTot">0:00</span>
+            </div>
+          </div>
+        </div>
+        <audio id="audioEl"></audio>
+      </div>
+
+      <!-- First step -->
+      <div class="step-box">
+        <div class="step-eyebrow">⚡ Қадами аввал</div>
+        <div class="step-text" id="resStep"></div>
+      </div>
+
+      <button class="retry-btn" onclick="resetQuiz()">↺ Боз як бор гузаштан</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+/* ════════════════════════════════
+   DATA
+════════════════════════════════ */
+const QS = [
+  { t:"Вақте касе ба ту кам аҳамият медиҳад, ту бештар чӣ ҳис мекунӣ?", o:[{l:"А",x:"Ман фикр мекунам бо ман ягон чиз нодуруст аст"},{l:"Б",x:"Метарсам, ки ӯ аз ман дур мешавад"},{l:"В",x:"Хомӯш мешавам, вале аз дарун ранҷида мемонам"}]},
+  { t:"Дар муносибат ту бештар чӣ кор мекунӣ?", o:[{l:"А",x:"Барои нигоҳ доштани одам аз худ мегузарам"},{l:"Б",x:"Мехоҳам ҳама чизро назорат кунам"},{l:"В",x:"Аз дарун метарсам, ки боз ранҷ мебинам"}]},
+  { t:"Вақте туро танқид мекунанд, ту бештар:", o:[{l:"А",x:"Худатро паст ҳис мекунӣ"},{l:"Б",x:"Худатро муҳофизат мекунӣ ё хафа мешавӣ"},{l:"В",x:"Дарунат дер боз ором намешавад"}]},
+  { t:"Вақте мехоҳӣ кори нав сар кунӣ, дарунат бештар чӣ мегӯяд?", o:[{l:"А",x:"Аз ман намебарояд"},{l:"Б",x:"Ҳоло вақт нест, баъдтар"},{l:"В",x:"Агар накунам, бехатартар аст"}]},
+  { t:"Бо пулу даромад ту бештар чӣ ҳис мекунӣ?", o:[{l:"А",x:"Ман ҳоло ба пули зиёд омода нестам"},{l:"Б",x:"Нархи худро гуфтан душвор аст"},{l:"В",x:"Метарсам, ки агар зиёд шавам, маро қабул намекунанд"}]},
+  { t:"Вақте касе туро интихоб намекунад, ту бештар чӣ фикр мекунӣ?", o:[{l:"А",x:"Ман кофӣ нестам"},{l:"Б",x:"Маро боз тарк карданд"},{l:"В",x:"Ба касе бовар кардан хатарнок аст"}]},
+  { t:"Дар зиндагӣ бештар кадом ҳолат ба ту наздик аст?", o:[{l:"А",x:"Бисёр худро бо дигарон муқоиса мекунам"},{l:"Б",x:"Бисёр ба дигарон бастагӣ пайдо мекунам"},{l:"В",x:"Бисёр шубҳа мекунам ва қадам намемонам"}]},
+  { t:"Вақте оромӣ меояд, дарунат чӣ мекунад?", o:[{l:"А",x:"Бовар намекунам, ки ин оромӣ мемонад"},{l:"Б",x:"Интизори мушкил мешавам"},{l:"В",x:"Ҳамоно фикр мекунам, ки чизе намерасад"}]},
+  { t:"Барои дӯст дошта шудан, ту бештар:", o:[{l:"А",x:"Худатро исбот мекунӣ"},{l:"Б",x:"Хомӯш мешавӣ ва тоқат мекунӣ"},{l:"В",x:"Қавӣ менамоӣ, то заиф набинанд"}]},
+  { t:"Вақте танҳо мемонӣ, бештар чӣ эҳсос меояд?", o:[{l:"А",x:"Холигӣ"},{l:"Б",x:"Тарси тарк шудан"},{l:"В",x:"Фикрҳои бисёр ва изтироб"}]},
+  { t:'Вақте бояд "не" гӯӣ, бештар чӣ мешавад?', o:[{l:"А",x:"Метарсам, ки маро бад мебинанд"},{l:"Б",x:"Аз худ мегузарам, то осоиш нигоҳ дорам"},{l:"В",x:"Баъд аз он аз худ меранҷам"}]},
+  { t:"Дар кори худ бештар кадом мушкилро дорӣ?", o:[{l:"А",x:"Кашолкорӣ мекунам"},{l:"Б",x:"Ба худ шубҳа дорам"},{l:"В",x:"Метарсам, ки маро танқид мекунанд"}]},
+  { t:"Вақте касе ба ту сард мешавад, ту бештар:", o:[{l:"А",x:"Аз пасаш медавӣ ё фикрат банд мешавад"},{l:"Б",x:"Дарунан мешиканӣ, вале нишон намедиҳӣ"},{l:"В",x:"Фикр мекунӣ, ки ту сабаб шудӣ"}]},
+  { t:"Даруни ту бештар кадом ҷумла такрор мешавад?", o:[{l:"А",x:"Ман кофӣ нестам"},{l:"Б",x:"Маро тарк мекунанд"},{l:"В",x:"Аз ман намебарояд"}]},
+  { t:"Агар рост ба худ нигоҳ кунӣ, бештар кадом чиз зиндагии туро идора мекунад?", o:[{l:"А",x:"Беқадрӣ"},{l:"Б",x:"Тарси гум кардан"},{l:"В",x:"Шубҳа ва тарс аз амал"}]}
+];
+
+const RESULTS = {
+  А: {
+    emoji:"🪞",
+    title:'"Ман кофӣ нестам"',
+    desc:"Ту бисёр вақт худро аз чашми дигарон мебинӣ. Қадри худро аз берун меҷӯӣ. Аз ҳамин сабаб дар робита, даромад ва ҳолати равонӣ зуд мешиканӣ.",
+    step:"Ҳар рӯз навис: «Имрӯз дар куҷо худро кам кардам?»",
+    // 👆 ЗАМЕНА АУДИО: замените "audio_a.mp3" на путь к вашему файлу
+    audio:"audio_a.mp3"
+  },
+  Б: {
+    emoji:"🔗",
+    title:'"Маро тарк мекунанд"',
+    desc:'Ту аз танҳо мондан, дур шудан ва гум кардани муҳаббат метарсӣ. Аз ҳамин сабаб аз худ мегузарӣ, вобаста мешавӣ ва "не" гуфтан душвор мешавад.',
+    step:"Навис: «Ман барои нигоҳ доштани кӣ аз худ мегузарам?»",
+    // 👆 ЗАМЕНА АУДИО: замените "audio_b.mp3" на путь к вашему файлу
+    audio:"audio_b.mp3"
+  },
+  В: {
+    emoji:"🌫️",
+    title:'"Аз ман намебарояд"',
+    desc:"Даруни ту аз амал, аз хато ва аз дард метарсад. Аз ҳамин сабаб қадам намемонӣ, шубҳа мекунӣ, кашолкорӣ меояд ва оромӣ дер намемонад.",
+    step:"Навис: «Агар ман аз тарс не, аз эътимод зиндагӣ мекардам, имрӯз чӣ мекардам?»",
+    // 👆 ЗАМЕНА АУДИО: замените "audio_v.mp3" на путь к вашему файлу
+    audio:"audio_v.mp3"
+  }
+};
+
+/* ════════════════════════════════
+   STATE
+════════════════════════════════ */
+let cur = 0;
+let answers = Array(15).fill(null);
+let playing = false;
+const audioEl = document.getElementById('audioEl');
+
+/* ════════════════════════════════
+   QUIZ LOGIC
+════════════════════════════════ */
+function startQuiz() {
+  document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  render();
+}
+
+function render() {
+  const q = QS[cur];
+  document.getElementById('qNum').textContent = `Савол ${String(cur+1).padStart(2,'0')}`;
+  document.getElementById('qText').textContent = q.t;
+  document.getElementById('progFraction').textContent = `${cur+1} / 15`;
+  document.getElementById('progFill').style.width = `${((cur+1)/15)*100}%`;
+
+  const list = document.getElementById('optList');
+  list.innerHTML = '';
+  q.o.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (answers[cur] === opt.l ? ' active' : '');
+    btn.innerHTML = `<span class="opt-circle">${opt.l}</span><span>${opt.x}</span>`;
+    btn.onclick = () => pick(opt.l);
+    list.appendChild(btn);
+  });
+
+  document.getElementById('btnBack').disabled = cur === 0;
+  document.getElementById('btnNext').textContent = cur === 14 ? 'Натиҷа →' : 'Пеш →';
+
+  const card = document.getElementById('qCard');
+  card.classList.remove('slide-in');
+  void card.offsetWidth;
+  card.classList.add('slide-in');
+}
+
+function pick(letter) {
+  answers[cur] = letter;
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.classList.toggle('active', b.querySelector('.opt-circle').textContent === letter);
+  });
+}
+
+function nextQ() {
+  if (!answers[cur]) {
+    const c = document.getElementById('qCard');
+    c.classList.remove('shake');
+    void c.offsetWidth;
+    c.classList.add('shake');
+    return;
+  }
+  if (cur < 14) { cur++; render(); }
+  else showResult();
+}
+
+function prevQ() {
+  if (cur > 0) { cur--; render(); }
+}
+
+/* ════════════════════════════════
+   RESULT
+════════════════════════════════ */
+function showResult() {
+  const cnt = {А:0,Б:0,В:0};
+  answers.forEach(a => { if(a) cnt[a]++; });
+
+  // Winner = max, tie-break: А > Б > В
+  let winner = 'А';
+  if (cnt['Б'] > cnt[winner]) winner = 'Б';
+  if (cnt['В'] > cnt[winner]) winner = 'В';
+
+  const r = RESULTS[winner];
+
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+
+  document.getElementById('resEmoji').textContent = r.emoji;
+  document.getElementById('resTitle').textContent = r.title;
+  document.getElementById('resDesc').textContent = r.desc;
+  document.getElementById('resStep').textContent = r.step;
+
+  // Score chips
+  const mini = document.getElementById('scoresMini');
+  mini.innerHTML = '';
+  ['А','Б','В'].forEach(k => {
+    const isW = k === winner;
+    const pct = Math.round((cnt[k]/15)*100);
+    mini.innerHTML += `
+      <div class="score-chip${isW?' winner':''}">
+        <span class="chip-letter">${k}</span>
+        <div class="chip-bar-bg"><div class="chip-bar-fill" style="width:${pct}%"></div></div>
+        <span class="chip-count">${cnt[k]}</span>
+      </div>`;
+  });
+
+  // Audio setup
+  audioEl.src = r.audio;
+  audioEl.load();
+
+  audioEl.ontimeupdate = () => {
+    if (!audioEl.duration) return;
+    const range = document.getElementById('audioRange');
+    range.max = audioEl.duration;
+    range.value = audioEl.currentTime;
+    document.getElementById('timeCur').textContent = fmt(audioEl.currentTime);
+    document.getElementById('timeTot').textContent = fmt(audioEl.duration);
+    // Update fill color on range
+    const pct = (audioEl.currentTime / audioEl.duration) * 100;
+    range.style.background = `linear-gradient(to right, var(--gold) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+  };
+
+  audioEl.onended = () => {
+    playing = false;
+    setPlayIcon(false);
+  };
+
+  document.getElementById('audioRange').oninput = e => {
+    audioEl.currentTime = e.target.value;
+  };
+}
+
+function toggleAudio() {
+  if (playing) {
+    audioEl.pause();
+    playing = false;
+    setPlayIcon(false);
+  } else {
+    audioEl.play().catch(() => {});
+    playing = true;
+    setPlayIcon(true);
+  }
+}
+
+function setPlayIcon(p) {
+  document.getElementById('playIco').innerHTML = p
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="6,3 20,12 6,21"/>';
+}
+
+function fmt(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return `${m}:${String(sec).padStart(2,'0')}`;
+}
+
+/* ════════════════════════════════
+   RESET
+════════════════════════════════ */
+function resetQuiz() {
+  cur = 0;
+  answers = Array(15).fill(null);
+  playing = false;
+  audioEl.pause();
+  audioEl.src = '';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('introScreen').style.display = 'block';
+  document.getElementById('introScreen').style.animation = 'none';
+  void document.getElementById('introScreen').offsetWidth;
+  document.getElementById('introScreen').style.animation = 'fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) both';
+}
+</script>
+</body>
+</html>
