@@ -3,694 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Тест: Бовари пинҳонӣ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Тест — Jannat Abdulloeva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
-      --bg: #07060f;
-      --surface: rgba(255,255,255,0.035);
-      --border: rgba(255,255,255,0.08);
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --gold-glow: rgba(201,168,76,0.18);
-      --cream: #f0ece4;
-      --muted: rgba(240,236,228,0.50);
-      --radius-lg: 22px;
-      --radius-md: 14px;
-      --radius-pill: 100px;
+      --accent: #e05a2b;
+      --accent-hover: #c94d20;
+      --text: #1a1a1a;
+      --muted: #666;
+      --border: #e0e0e0;
+      --bg: #f5f5f5;
+      --white: #ffffff;
+      --radius: 6px;
     }
-
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-    html { scroll-behavior: smooth; }
 
     body {
+      font-family: 'Manrope', sans-serif;
       background: var(--bg);
-      color: var(--cream);
-      font-family: 'Nunito', sans-serif;
+      color: var(--text);
       min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px 48px;
-      overflow-x: hidden;
-      position: relative;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    /* Ambient background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(80,40,160,0.18) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 80% 90%, rgba(160,90,30,0.12) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Subtle grain */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 540px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ════════════════════════════
-       INTRO SCREEN
-    ════════════════════════════ */
-    .intro-screen {
-      text-align: center;
-      animation: fadeUp 0.9s cubic-bezier(0.4,0,0.2,1) both;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--gold-glow);
-      border: 1px solid rgba(201,168,76,0.25);
-      border-radius: var(--radius-pill);
-      padding: 6px 16px;
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      font-weight: 700;
-      margin-bottom: 28px;
-    }
-
-    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 2s ease infinite; }
-
-    @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
-
-    .intro-title {
-      font-family: 'Philosopher', serif;
-      font-size: clamp(24px, 5.5vw, 36px);
-      font-weight: 700;
-      line-height: 1.25;
-      margin-bottom: 20px;
-      background: linear-gradient(145deg, var(--cream) 30%, var(--gold-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.5px;
-    }
-
-    .intro-sub {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.75;
-      margin-bottom: 36px;
-      max-width: 380px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .stats-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      margin-bottom: 40px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .stat {
-      flex: 1;
-      padding: 18px 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .stat + .stat { border-left: 1px solid var(--border); }
-
-    .stat-num {
-      font-family: 'Philosopher', serif;
-      font-size: 30px;
-      font-weight: 700;
-      color: var(--gold-light);
-      line-height: 1;
-    }
-
-    .stat-lbl {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-      color: #12100a;
-      font-family: 'Nunito', sans-serif;
-      font-size: 15px;
+    .brand {
+      font-size: 18px;
       font-weight: 800;
-      padding: 17px 44px;
-      border: none;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      letter-spacing: 0.3px;
-      transition: all 0.3s ease;
-      box-shadow: 0 6px 28px rgba(201,168,76,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
-    }
-
-    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,168,76,0.45), inset 0 1px 0 rgba(255,255,255,0.25); }
-    .cta-btn:active { transform: translateY(-1px); }
-
-    .cta-btn svg { transition: transform 0.3s ease; }
-    .cta-btn:hover svg { transform: translateX(4px); }
-
-    /* ════════════════════════════
-       QUIZ SCREEN
-    ════════════════════════════ */
-    .quiz-screen { display: none; }
-
-    /* Progress */
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .progress-label {
-      font-size: 11px;
-      letter-spacing: 2.5px;
-      color: var(--muted);
-      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text);
       text-transform: uppercase;
     }
 
-    .progress-fraction {
-      font-size: 13px;
-      color: var(--gold);
-      font-weight: 700;
+    /* PAGE */
+    .page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
     }
 
-    .progress-track {
-      height: 3px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 100px;
-      margin-bottom: 24px;
+    /* QUIZ CARD */
+    .quiz-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       overflow: hidden;
     }
 
+    .progress-bar { height: 3px; background: #ebebeb; }
     .progress-fill {
       height: 100%;
-      border-radius: 100px;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      box-shadow: 0 0 10px rgba(201,168,76,0.6);
-      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+      background: var(--accent);
+      transition: width 0.4s ease;
     }
 
-    /* Question Card */
-    .q-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 30px 26px 26px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 24px 64px rgba(0,0,0,0.45),
-        0 1px 0 rgba(255,255,255,0.05) inset,
-        0 -1px 0 rgba(0,0,0,0.2) inset;
-    }
-
-    .q-num {
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .q-num::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(201,168,76,0.3), transparent);
-    }
+    .q-body { padding: 24px 20px 20px; }
 
     .q-text {
-      font-family: 'Philosopher', serif;
-      font-size: clamp(16px, 3.5vw, 20px);
-      line-height: 1.6;
-      color: var(--cream);
-      margin-bottom: 24px;
-    }
-
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .opt-btn {
-      display: flex;
-      align-items: flex-start;
-      gap: 13px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius-md);
-      padding: 15px 16px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.22s ease;
-      color: var(--cream);
-      font-family: 'Nunito', sans-serif;
-      font-size: 14.5px;
-      line-height: 1.5;
-      width: 100%;
-    }
-
-    .opt-btn:hover {
-      background: rgba(201,168,76,0.08);
-      border-color: rgba(201,168,76,0.25);
-      transform: translateX(3px);
-    }
-
-    .opt-btn.active {
-      background: rgba(201,168,76,0.13);
-      border-color: var(--gold);
-      box-shadow: 0 0 24px rgba(201,168,76,0.08);
-    }
-
-    .opt-circle {
-      min-width: 30px;
-      height: 30px;
-      width: 30px;
-      border-radius: 50%;
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.22);
-      color: var(--gold-light);
-      font-size: 12px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.22s ease;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .opt-btn.active .opt-circle {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #12100a;
-    }
-
-    /* Nav */
-    .nav {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .btn-back, .btn-next {
-      border: none;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
+      font-size: 22px;
       font-weight: 700;
-      padding: 14px 20px;
-      transition: all 0.22s ease;
-    }
-
-    .btn-back {
-      flex: 0 0 auto;
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.09);
-      padding: 14px 22px;
-    }
-
-    .btn-back:hover { background: rgba(255,255,255,0.09); color: var(--cream); }
-
-    .btn-next {
-      flex: 1;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-      color: #12100a;
-      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
-    }
-
-    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,168,76,0.45); }
-
-    .btn-back:disabled, .btn-next:disabled { opacity: 0.25; cursor: not-allowed; transform: none !important; }
-
-    /* Shake on no answer */
-    .shake { animation: shake 0.45s ease both !important; }
-    @keyframes shake {
-      0%,100%{ transform:translateX(0); }
-      20%{ transform:translateX(-8px); }
-      40%{ transform:translateX(8px); }
-      60%{ transform:translateX(-5px); }
-      80%{ transform:translateX(5px); }
-    }
-
-    /* ════════════════════════════
-       RESULT SCREEN
-    ════════════════════════════ */
-    .result-screen { display: none; animation: fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) both; }
-
-    .res-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 36px 26px 28px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.05) inset;
-      text-align: center;
-    }
-
-    .res-emoji {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.25);
-      background: var(--gold-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      margin: 0 auto 22px;
-      box-shadow: 0 0 40px rgba(201,168,76,0.12);
-    }
-
-    .res-eyebrow {
-      font-size: 10px;
-      letter-spacing: 3.5px;
-      color: var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .res-title {
-      font-family: 'Philosopher', serif;
-      font-size: clamp(21px, 5vw, 30px);
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 14px;
-      background: linear-gradient(145deg, var(--cream) 30%, var(--gold-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .res-desc {
-      font-size: 14.5px;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 26px;
-    }
-
-    /* ── Consult CTA ── */
-    .consult-btn {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 100%);
-      border: 1px solid rgba(201,168,76,0.3);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 20px;
-      text-decoration: none;
-      transition: all 0.28s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .consult-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.08), transparent);
-      opacity: 0;
-      transition: opacity 0.28s ease;
-    }
-
-    .consult-btn:hover { transform: translateY(-3px); border-color: rgba(201,168,76,0.55); box-shadow: 0 12px 36px rgba(201,168,76,0.15); }
-    .consult-btn:hover::before { opacity: 1; }
-
-    .consult-icon {
-      width: 48px;
-      height: 48px;
-      min-width: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 18px rgba(201,168,76,0.35);
-      color: #12100a;
-      position: relative;
-      z-index: 1;
-    }
-
-    .consult-text {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      text-align: left;
-      position: relative;
-      z-index: 1;
-    }
-
-    .consult-title {
-      font-family: 'Philosopher', serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--gold-light);
-      line-height: 1.2;
-    }
-
-    .consult-sub {
-      font-size: 12.5px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    /* ── Step box ── */
-    .step-box {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      text-align: left;
-      margin-bottom: 20px;
-    }
-
-    .step-eyebrow {
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .step-text {
-      font-family: 'Philosopher', serif;
-      font-size: 15.5px;
-      font-style: italic;
-      color: rgba(240,236,228,0.88);
-      line-height: 1.65;
-    }
-
-    /* ── Scores mini ── */
-    .scores-mini {
-      display: flex;
-      gap: 8px;
+      line-height: 1.4;
+      color: var(--text);
       margin-bottom: 22px;
     }
 
-    .score-chip {
-      flex: 1;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 10px;
-      padding: 10px 8px;
+    /* RADIO OPTIONS */
+    .options { display: flex; flex-direction: column; }
+
+    .opt-label {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 14px;
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      user-select: none;
+      transition: color 0.15s;
     }
 
-    .score-chip.winner {
-      background: var(--gold-glow);
-      border-color: rgba(201,168,76,0.3);
+    .opt-label:first-child { border-top: none; }
+    .opt-label:hover { color: var(--accent); }
+    .opt-label input[type="radio"] { display: none; }
+
+    .radio-circle {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.18s;
+      flex-shrink: 0;
     }
 
-    .chip-letter {
+    .radio-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      transform: scale(0.3);
+      transition: all 0.18s ease;
+    }
+
+    .opt-label input[type="radio"]:checked ~ .radio-circle { border-color: var(--accent); }
+    .opt-label input[type="radio"]:checked ~ .radio-circle .radio-dot { opacity: 1; transform: scale(1); }
+
+    /* FOOTER */
+    .q-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-next {
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 13px 30px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+    }
+
+    .btn-next:hover { background: var(--accent-hover); }
+    .btn-next:active { transform: scale(0.97); }
+
+    .q-counter { font-size: 15px; font-weight: 600; color: var(--muted); }
+
+    /* SHAKE */
+    .shake { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100%{ transform:translateX(0) }
+      25%{ transform:translateX(-8px) }
+      75%{ transform:translateX(8px) }
+    }
+
+    /* RESULT */
+    .result-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: none;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    .res-top {
+      background: var(--accent);
+      padding: 32px 24px 28px;
+      text-align: center;
+    }
+
+    .res-emoji { font-size: 52px; margin-bottom: 12px; line-height: 1; }
+
+    .res-eyebrow {
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--muted);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 10px;
     }
 
-    .score-chip.winner .chip-letter { color: var(--gold-light); }
-
-    .chip-bar-bg {
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 100px;
+    .res-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
     }
 
-    .chip-bar-fill {
-      height: 100%;
-      background: rgba(255,255,255,0.15);
-      border-radius: 100px;
-      transition: width 1s ease;
-    }
+    .res-body { padding: 24px 20px 20px; }
 
-    .score-chip.winner .chip-bar-fill { background: var(--gold); }
-
-    .chip-count {
+    .res-desc {
       font-size: 16px;
-      font-weight: 700;
-      color: var(--muted);
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 22px;
     }
 
-    .score-chip.winner .chip-count { color: var(--gold-light); }
+    /* Score row */
+    .score-row { display: flex; gap: 8px; margin-bottom: 22px; }
+
+    .score-chip {
+      flex: 1;
+      background: #f7f7f7;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 8px;
+      text-align: center;
+    }
+
+    .score-chip.winner { background: #fff2ee; border-color: var(--accent); }
+
+    .chip-letter {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .score-chip.winner .chip-letter { color: var(--accent); }
+
+    .chip-count { font-size: 30px; font-weight: 800; color: #d0d0d0; }
+    .score-chip.winner .chip-count { color: var(--accent); }
+
+    /* Consult */
+    .consult-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      transition: background 0.18s, transform 0.15s;
+    }
+
+    .consult-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+    .consult-icon {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .consult-text { display: flex; flex-direction: column; gap: 3px; }
+    .consult-title { font-size: 15px; font-weight: 800; color: #fff; }
+    .consult-sub { font-size: 12px; color: rgba(255,255,255,0.8); }
 
     .retry-btn {
       width: 100%;
-      padding: 15px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255,255,255,0.1);
+      padding: 13px;
+      border: 1.5px solid var(--border);
       background: transparent;
-      color: var(--muted);
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
+      border-radius: var(--radius);
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
       font-weight: 700;
+      color: var(--muted);
       cursor: pointer;
-      transition: all 0.25s ease;
-      letter-spacing: 0.3px;
+      transition: all 0.18s;
     }
 
-    .retry-btn:hover { background: rgba(255,255,255,0.05); color: var(--cream); border-color: rgba(255,255,255,0.18); }
+    .retry-btn:hover { border-color: #999; color: var(--text); }
 
-    /* ════════════════════════════
-       ANIMATIONS
-    ════════════════════════════ */
-    @keyframes fadeUp {
-      from { opacity:0; transform: translateY(28px); }
-      to { opacity:1; transform: translateY(0); }
-    }
-
-    @keyframes cardIn {
-      from { opacity:0; transform: translateX(32px) scale(0.98); }
-      to { opacity:1; transform: translateX(0) scale(1); }
-    }
-
-    @keyframes cardOut {
-      from { opacity:1; transform: translateX(0) scale(1); }
-      to { opacity:0; transform: translateX(-32px) scale(0.98); }
-    }
-
-    .slide-in { animation: cardIn 0.42s cubic-bezier(0.4,0,0.2,1) both; }
-
-    /* ════════════════════════════
-       MOBILE
-    ════════════════════════════ */
     @media (max-width: 480px) {
-      body { padding: 20px 14px 40px; align-items: flex-start; padding-top: 36px; }
-      .q-card { padding: 24px 18px 22px; }
-      .res-card { padding: 28px 18px 24px; }
-      .cta-btn { padding: 16px 36px; font-size: 14px; }
+      .q-text { font-size: 19px; }
+      .res-title { font-size: 21px; }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
+<header class="header">
+  <span class="brand">Jannat Abdulloeva</span>
+</header>
 
-  <!-- ══ QUIZ ══ -->
-  <div class="quiz-screen" id="quizScreen" style="display:block">
-    <div class="progress-header">
-      <span class="progress-label">Пешрафт</span>
-      <span class="progress-fraction" id="progFraction">1 / 15</span>
-    </div>
-    <div class="progress-track">
+<div class="page">
+
+  <!-- QUIZ -->
+  <div class="quiz-card" id="quizCard">
+    <div class="progress-bar">
       <div class="progress-fill" id="progFill" style="width:6.67%"></div>
     </div>
-
-    <div class="q-card slide-in" id="qCard">
-      <div class="q-num" id="qNum">Савол 01</div>
+    <div class="q-body">
       <div class="q-text" id="qText"></div>
       <div class="options" id="optList"></div>
     </div>
-
-    <div class="nav">
-      <button class="btn-back" id="btnBack" onclick="prevQ()">← Қафо</button>
-      <button class="btn-next" id="btnNext" onclick="nextQ()">Пеш →</button>
+    <div class="q-footer">
+      <button class="btn-next" id="btnNext" onclick="nextQ()">ПЕШ</button>
+      <span class="q-counter" id="qCounter">1 / 15</span>
     </div>
   </div>
 
-  <!-- ══ RESULT ══ -->
-  <div class="result-screen" id="resultScreen">
-    <div class="res-card">
-      <div class="res-emoji" id="resEmoji">🪞</div>
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div class="res-top">
+      <div class="res-emoji" id="resEmoji"></div>
       <div class="res-eyebrow">Бовари пинҳонии ту</div>
-      <h2 class="res-title" id="resTitle"></h2>
+      <div class="res-title" id="resTitle"></div>
+    </div>
+    <div class="res-body">
       <p class="res-desc" id="resDesc"></p>
-
-      <!-- Score breakdown -->
-      <div class="scores-mini" id="scoresMini"></div>
-
-      <!-- Consultation CTA -->
+      <div class="score-row" id="scoreRow"></div>
       <a href="https://t.me/jannat_abdulloeva_admin" target="_blank" class="consult-btn">
-        <span class="consult-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </span>
-        <span class="consult-text">
-          <span class="consult-title">Бо мутахассис маслиҳат кун</span>
-          <span class="consult-sub">Машварати шахсӣ бо равоншинос →</span>
-        </span>
+        <div class="consult-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="consult-text">
+          <span class="consult-title">Машварат гир бо мутахассис</span>
+          <span class="consult-sub">Равоншинос Jannat Abdulloeva →</span>
+        </div>
       </a>
-
-      <!-- First step -->
-      
-
       <button class="retry-btn" onclick="resetQuiz()">↺ Боз як бор гузаштан</button>
     </div>
   </div>
 
-</div><!-- /container -->
+</div>
 
 <script>
-/* ════════════════════════════════
-   DATA
-════════════════════════════════ */
 const QS = [
   { t:"Вақте касе ба ту кам аҳамият медиҳад, ту бештар чӣ ҳис мекунӣ?", o:[{l:"А",x:"Ман фикр мекунам бо ман ягон чиз нодуруст аст"},{l:"Б",x:"Метарсам, ки ӯ аз ман дур мешавад"},{l:"В",x:"Хомӯш мешавам, вале аз дарун ранҷида мемонам"}]},
   { t:"Дар муносибат ту бештар чӣ кор мекунӣ?", o:[{l:"А",x:"Барои нигоҳ доштани одам аз худ мегузарам"},{l:"Б",x:"Мехоҳам ҳама чизро назорат кунам"},{l:"В",x:"Аз дарун метарсам, ки боз ранҷ мебинам"}]},
@@ -699,7 +350,7 @@ const QS = [
   { t:"Бо пулу даромад ту бештар чӣ ҳис мекунӣ?", o:[{l:"А",x:"Ман ҳоло ба пули зиёд омода нестам"},{l:"Б",x:"Нархи худро гуфтан душвор аст"},{l:"В",x:"Метарсам, ки агар зиёд шавам, маро қабул намекунанд"}]},
   { t:"Вақте касе туро интихоб намекунад, ту бештар чӣ фикр мекунӣ?", o:[{l:"А",x:"Ман кофӣ нестам"},{l:"Б",x:"Маро боз тарк карданд"},{l:"В",x:"Ба касе бовар кардан хатарнок аст"}]},
   { t:"Дар зиндагӣ бештар кадом ҳолат ба ту наздик аст?", o:[{l:"А",x:"Бисёр худро бо дигарон муқоиса мекунам"},{l:"Б",x:"Бисёр ба дигарон бастагӣ пайдо мекунам"},{l:"В",x:"Бисёр шубҳа мекунам ва қадам намемонам"}]},
-  { t:"Вақте оромӣ меояд, дарунат чӣ мекунад?", o:[{l:"А",x:"Бовар намекунам, ки ин оромӣ мемонад"},{l:"Б",x:"Интизори мушкил мешавам"},{l:"В",x:"Ҳамоно фикр мекунам, ки чизе намерасад"}]},
+  { t:"Вақте оромӣ меояд, дарунат чӣ мекунад?", o:[{l:"А",x:"Бовар намекунам, ки ин оромӣ мемонад"},{л:"Б",x:"Интизори мушкил мешавам"},{l:"В",x:"Ҳамоно фикр мекунам, ки чизе намерасад"}]},
   { t:"Барои дӯст дошта шудан, ту бештар:", o:[{l:"А",x:"Худатро исбот мекунӣ"},{l:"Б",x:"Хомӯш мешавӣ ва тоқат мекунӣ"},{l:"В",x:"Қавӣ менамоӣ, то заиф набинанд"}]},
   { t:"Вақте танҳо мемонӣ, бештар чӣ эҳсос меояд?", o:[{l:"А",x:"Холигӣ"},{l:"Б",x:"Тарси тарк шудан"},{l:"В",x:"Фикрҳои бисёр ва изтироб"}]},
   { t:'Вақте бояд "не" гӯӣ, бештар чӣ мешавад?', o:[{l:"А",x:"Метарсам, ки маро бад мебинанд"},{l:"Б",x:"Аз худ мегузарам, то осоиш нигоҳ дорам"},{l:"В",x:"Баъд аз он аз худ меранҷам"}]},
@@ -710,140 +361,95 @@ const QS = [
 ];
 
 const RESULTS = {
-  А: {
-    emoji:"🪞",
-    title:'"Ман кофӣ нестам"',
-    desc:"Ту бисёр вақт худро аз чашми дигарон мебинӣ. Қадри худро аз берун меҷӯӣ. Аз ҳамин сабаб дар робита, даромад ва ҳолати равонӣ зуд мешиканӣ.",
-    step:"Ҳар рӯз навис: «Имрӯз дар куҷо худро кам кардам?»"
-  },
-  Б: {
-    emoji:"🔗",
-    title:'"Маро тарк мекунанд"',
-    desc:'Ту аз танҳо мондан, дур шудан ва гум кардани муҳаббат метарсӣ. Аз ҳамин сабаб аз худ мегузарӣ, вобаста мешавӣ ва "не" гуфтан душвор мешавад.',
-    step:"Навис: «Ман барои нигоҳ доштани кӣ аз худ мегузарам?»"
-  },
-  В: {
-    emoji:"🌫️",
-    title:'"Аз ман намебарояд"',
-    desc:"Даруни ту аз амал, аз хато ва аз дард метарсад. Аз ҳамин сабаб қадам намемонӣ, шубҳа мекунӣ, кашолкорӣ меояд ва оромӣ дер намемонад.",
-    step:"Навис: «Агар ман аз тарс не, аз эътимод зиндагӣ мекардам, имрӯз чӣ мекардам?»"
-  }
+  А: { emoji:"🪞", title:'"Ман кофӣ нестам"', desc:"Ту бисёр вақт худро аз чашми дигарон мебинӣ. Қадри худро аз берун меҷӯӣ. Аз ҳамин сабаб дар робита, даромад ва ҳолати равонӣ зуд мешиканӣ." },
+  Б: { emoji:"🔗", title:'"Маро тарк мекунанд"', desc:'Ту аз танҳо мондан, дур шудан ва гум кардани муҳаббат метарсӣ. Аз ҳамин сабаб аз худ мегузарӣ, вобаста мешавӣ ва "не" гуфтан душвор мешавад.' },
+  В: { emoji:"🌫️", title:'"Аз ман намебарояд"', desc:"Даруни ту аз амал, аз хато ва аз дард метарсад. Аз ҳамин сабаб қадам намемонӣ, шубҳа мекунӣ, кашолкорӣ меояд ва оромӣ дер намемонад." }
 };
 
-/* ════════════════════════════════
-   STATE
-════════════════════════════════ */
 let cur = 0;
 let answers = Array(15).fill(null);
 
-/* ════════════════════════════════
-   QUIZ LOGIC
-════════════════════════════════ */
-function startQuiz() {
-  document.getElementById('introScreen').style.display = 'none';
-  document.getElementById('quizScreen').style.display = 'block';
-  render();
-}
-
 function render() {
   const q = QS[cur];
-  document.getElementById('qNum').textContent = `Савол ${String(cur+1).padStart(2,'0')}`;
   document.getElementById('qText').textContent = q.t;
-  document.getElementById('progFraction').textContent = `${cur+1} / 15`;
-  document.getElementById('progFill').style.width = `${((cur+1)/15)*100}%`;
+  document.getElementById('qCounter').textContent = `${cur + 1} / 15`;
+  document.getElementById('progFill').style.width = `${((cur + 1) / 15) * 100}%`;
+  document.getElementById('btnNext').textContent = cur === 14 ? 'НАТИҶА' : 'ПЕШ';
 
   const list = document.getElementById('optList');
   list.innerHTML = '';
   q.o.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn' + (answers[cur] === opt.l ? ' active' : '');
-    btn.innerHTML = `<span class="opt-circle">${opt.l}</span><span>${opt.x}</span>`;
-    btn.onclick = () => pick(opt.l);
-    list.appendChild(btn);
-  });
-
-  document.getElementById('btnBack').disabled = cur === 0;
-  document.getElementById('btnNext').textContent = cur === 14 ? 'Натиҷа →' : 'Пеш →';
-
-  const card = document.getElementById('qCard');
-  card.classList.remove('slide-in');
-  void card.offsetWidth;
-  card.classList.add('slide-in');
-}
-
-function pick(letter) {
-  answers[cur] = letter;
-  document.querySelectorAll('.opt-btn').forEach(b => {
-    b.classList.toggle('active', b.querySelector('.opt-circle').textContent === letter);
+    if (!opt.l) return; // skip malformed
+    const label = document.createElement('label');
+    label.className = 'opt-label';
+    label.innerHTML = `
+      <input type="radio" name="q${cur}" value="${opt.l}" ${answers[cur] === opt.l ? 'checked' : ''}>
+      <span class="radio-circle"><span class="radio-dot"></span></span>
+      <span>${opt.x}</span>
+    `;
+    label.querySelector('input').addEventListener('change', e => {
+      answers[cur] = e.target.value;
+    });
+    list.appendChild(label);
   });
 }
 
 function nextQ() {
+  const sel = document.querySelector(`input[name="q${cur}"]:checked`);
+  if (sel) answers[cur] = sel.value;
+
   if (!answers[cur]) {
-    const c = document.getElementById('qCard');
+    const c = document.getElementById('quizCard');
     c.classList.remove('shake');
     void c.offsetWidth;
     c.classList.add('shake');
     return;
   }
-  if (cur < 14) { cur++; render(); }
+  if (cur < 14) { cur++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
   else showResult();
 }
 
-function prevQ() {
-  if (cur > 0) { cur--; render(); }
-}
-
-/* ════════════════════════════════
-   RESULT
-════════════════════════════════ */
 function showResult() {
-  const cnt = {А:0,Б:0,В:0};
-  answers.forEach(a => { if(a) cnt[a]++; });
+  const cnt = { А:0, Б:0, В:0 };
+  answers.forEach(a => { if (a && cnt[a] !== undefined) cnt[a]++; });
 
-  // Winner = max, tie-break: А > Б > В
   let winner = 'А';
   if (cnt['Б'] > cnt[winner]) winner = 'Б';
   if (cnt['В'] > cnt[winner]) winner = 'В';
 
   const r = RESULTS[winner];
-
-  document.getElementById('quizScreen').style.display = 'none';
-  document.getElementById('resultScreen').style.display = 'block';
+  document.getElementById('quizCard').style.display = 'none';
+  const rc = document.getElementById('resultCard');
+  rc.style.display = 'block';
 
   document.getElementById('resEmoji').textContent = r.emoji;
   document.getElementById('resTitle').textContent = r.title;
   document.getElementById('resDesc').textContent = r.desc;
-  document.getElementById('resStep').textContent = r.step;
 
-  // Score chips
-  const mini = document.getElementById('scoresMini');
-  mini.innerHTML = '';
+  const row = document.getElementById('scoreRow');
+  row.innerHTML = '';
   ['А','Б','В'].forEach(k => {
     const isW = k === winner;
-    const pct = Math.round((cnt[k]/15)*100);
-    mini.innerHTML += `
-      <div class="score-chip${isW?' winner':''}">
+    row.innerHTML += `
+      <div class="score-chip${isW ? ' winner' : ''}">
         <span class="chip-letter">${k}</span>
-        <div class="chip-bar-bg"><div class="chip-bar-fill" style="width:${pct}%"></div></div>
         <span class="chip-count">${cnt[k]}</span>
       </div>`;
   });
 
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ════════════════════════════════
-   RESET
-════════════════════════════════ */
 function resetQuiz() {
   cur = 0;
   answers = Array(15).fill(null);
-  document.getElementById('resultScreen').style.display = 'none';
-  document.getElementById('introScreen').style.display = 'block';
-  document.getElementById('introScreen').style.animation = 'none';
-  void document.getElementById('introScreen').offsetWidth;
-  document.getElementById('introScreen').style.animation = 'fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) both';
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+render();
 </script>
 </body>
 </html>
