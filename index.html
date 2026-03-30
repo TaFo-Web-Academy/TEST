@@ -432,83 +432,70 @@
       margin-bottom: 26px;
     }
 
-    /* ── Audio Player ── */
-    .audio-box {
-      background: rgba(201,168,76,0.05);
-      border: 1px solid rgba(201,168,76,0.15);
+    /* ── Consult CTA ── */
+    .consult-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 100%);
+      border: 1px solid rgba(201,168,76,0.3);
       border-radius: var(--radius-md);
       padding: 18px 20px;
       margin-bottom: 20px;
+      text-decoration: none;
+      transition: all 0.28s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .audio-label {
-      font-size: 11px;
-      letter-spacing: 2.5px;
-      color: var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      text-align: left;
+    .consult-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.28s ease;
     }
 
-    .player-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .consult-btn:hover { transform: translateY(-3px); border-color: rgba(201,168,76,0.55); box-shadow: 0 12px 36px rgba(201,168,76,0.15); }
+    .consult-btn:hover::before { opacity: 1; }
 
-    .play-circle {
+    .consult-icon {
       width: 48px;
       height: 48px;
       min-width: 48px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      border: none;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 18px rgba(201,168,76,0.35);
-      transition: all 0.25s ease;
+      color: #12100a;
+      position: relative;
+      z-index: 1;
     }
 
-    .play-circle:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
-    .play-circle svg { fill: #12100a; }
-
-    .player-info { flex: 1; }
-
-    .audio-range {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 100px;
-      outline: none;
-      cursor: pointer;
-      margin-bottom: 6px;
-      accent-color: var(--gold);
-    }
-
-    .audio-range::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 6px var(--gold);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .audio-range::-webkit-slider-thumb:hover { transform: scale(1.3); }
-
-    .audio-time-row {
+    .consult-text {
       display: flex;
-      justify-content: space-between;
-      font-size: 11px;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .consult-title {
+      font-family: 'Philosopher', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1.2;
+    }
+
+    .consult-sub {
+      font-size: 12.5px;
       color: var(--muted);
-      letter-spacing: 0.5px;
+      font-weight: 500;
     }
 
     /* ── Step box ── */
@@ -707,29 +694,19 @@
       <!-- Score breakdown -->
       <div class="scores-mini" id="scoresMini"></div>
 
-      <!-- Audio player -->
-      <div class="audio-box">
-        <div class="audio-label">🎙 Паёми овозии мутахассис</div>
-        <div class="player-row">
-          <button class="play-circle" id="playBtn" onclick="toggleAudio()">
-            <svg id="playIco" width="18" height="18" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
-          </button>
-          <div class="player-info">
-            <input type="range" class="audio-range" id="audioRange" value="0" min="0" step="0.01">
-            <div class="audio-time-row">
-              <span id="timeCur">0:00</span>
-              <span id="timeTot">0:00</span>
-            </div>
-          </div>
-        </div>
-        <audio id="audioEl"></audio>
-      </div>
+      <!-- Consultation CTA -->
+      <a href="https://t.me/jannat_abdulloeva_admin" target="_blank" class="consult-btn">
+        <span class="consult-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span class="consult-text">
+          <span class="consult-title">Бо мутахассис маслиҳат кун</span>
+          <span class="consult-sub">Машварати шахсӣ бо равоншинос →</span>
+        </span>
+      </a>
 
       <!-- First step -->
-      <div class="step-box">
-        <div class="step-eyebrow">⚡ Қадами аввал</div>
-        <div class="step-text" id="resStep"></div>
-      </div>
+     
 
       <button class="retry-btn" onclick="resetQuiz()">↺ Боз як бор гузаштан</button>
     </div>
@@ -764,25 +741,19 @@ const RESULTS = {
     emoji:"🪞",
     title:'"Ман кофӣ нестам"',
     desc:"Ту бисёр вақт худро аз чашми дигарон мебинӣ. Қадри худро аз берун меҷӯӣ. Аз ҳамин сабаб дар робита, даромад ва ҳолати равонӣ зуд мешиканӣ.",
-    step:"Ҳар рӯз навис: «Имрӯз дар куҷо худро кам кардам?»",
-    // 👆 ЗАМЕНА АУДИО: замените "audio_a.mp3" на путь к вашему файлу
-    audio:"audio_a.mp3"
+    step:"Ҳар рӯз навис: «Имрӯз дар куҷо худро кам кардам?»"
   },
   Б: {
     emoji:"🔗",
     title:'"Маро тарк мекунанд"',
     desc:'Ту аз танҳо мондан, дур шудан ва гум кардани муҳаббат метарсӣ. Аз ҳамин сабаб аз худ мегузарӣ, вобаста мешавӣ ва "не" гуфтан душвор мешавад.',
-    step:"Навис: «Ман барои нигоҳ доштани кӣ аз худ мегузарам?»",
-    // 👆 ЗАМЕНА АУДИО: замените "audio_b.mp3" на путь к вашему файлу
-    audio:"audio_b.mp3"
+    step:"Навис: «Ман барои нигоҳ доштани кӣ аз худ мегузарам?»"
   },
   В: {
     emoji:"🌫️",
     title:'"Аз ман намебарояд"',
     desc:"Даруни ту аз амал, аз хато ва аз дард метарсад. Аз ҳамин сабаб қадам намемонӣ, шубҳа мекунӣ, кашолкорӣ меояд ва оромӣ дер намемонад.",
-    step:"Навис: «Агар ман аз тарс не, аз эътимод зиндагӣ мекардам, имрӯз чӣ мекардам?»",
-    // 👆 ЗАМЕНА АУДИО: замените "audio_v.mp3" на путь к вашему файлу
-    audio:"audio_v.mp3"
+    step:"Навис: «Агар ман аз тарс не, аз эътимод зиндагӣ мекардам, имрӯз чӣ мекардам?»"
   }
 };
 
@@ -791,8 +762,6 @@ const RESULTS = {
 ════════════════════════════════ */
 let cur = 0;
 let answers = Array(15).fill(null);
-let playing = false;
-const audioEl = document.getElementById('audioEl');
 
 /* ════════════════════════════════
    QUIZ LOGIC
@@ -888,54 +857,6 @@ function showResult() {
       </div>`;
   });
 
-  // Audio setup
-  audioEl.src = r.audio;
-  audioEl.load();
-
-  audioEl.ontimeupdate = () => {
-    if (!audioEl.duration) return;
-    const range = document.getElementById('audioRange');
-    range.max = audioEl.duration;
-    range.value = audioEl.currentTime;
-    document.getElementById('timeCur').textContent = fmt(audioEl.currentTime);
-    document.getElementById('timeTot').textContent = fmt(audioEl.duration);
-    // Update fill color on range
-    const pct = (audioEl.currentTime / audioEl.duration) * 100;
-    range.style.background = `linear-gradient(to right, var(--gold) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
-  };
-
-  audioEl.onended = () => {
-    playing = false;
-    setPlayIcon(false);
-  };
-
-  document.getElementById('audioRange').oninput = e => {
-    audioEl.currentTime = e.target.value;
-  };
-}
-
-function toggleAudio() {
-  if (playing) {
-    audioEl.pause();
-    playing = false;
-    setPlayIcon(false);
-  } else {
-    audioEl.play().catch(() => {});
-    playing = true;
-    setPlayIcon(true);
-  }
-}
-
-function setPlayIcon(p) {
-  document.getElementById('playIco').innerHTML = p
-    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
-    : '<polygon points="6,3 20,12 6,21"/>';
-}
-
-function fmt(s) {
-  if (!s || isNaN(s)) return '0:00';
-  const m = Math.floor(s/60), sec = Math.floor(s%60);
-  return `${m}:${String(sec).padStart(2,'0')}`;
 }
 
 /* ════════════════════════════════
@@ -944,9 +865,6 @@ function fmt(s) {
 function resetQuiz() {
   cur = 0;
   answers = Array(15).fill(null);
-  playing = false;
-  audioEl.pause();
-  audioEl.src = '';
   document.getElementById('resultScreen').style.display = 'none';
   document.getElementById('introScreen').style.display = 'block';
   document.getElementById('introScreen').style.animation = 'none';
